@@ -1,0 +1,14 @@
+{
+  "description": "This is for the api server",
+  "name": "server-api",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "socket.io": "^1.4.8"
+  },
+  "scripts": {
+    "server": "node server.js"
+  }
+}
