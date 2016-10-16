@@ -11,13 +11,13 @@
  */
 var path = require('path');
 var express = require('express');
-// var bodyParser = require('body-parser');
+var bodyParser = require('body-parser');
 var port = 3001;
 
 // Configure app to use bodyParser to parse json data
 var app = express(); 
 var server = require('http').createServer(app);  
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 
 // Websockets!
@@ -28,17 +28,22 @@ var server = require('http').createServer(app);
 
 
 // Catch initial page load requests
-app.get('*', function(req, res) {
+app.get('/', serveApp);
+app.get('/dashboard', serveApp);
+app.get('/testsuite', serveApp);
+
+function serveApp (req, res) {
   var buildDir = path.resolve(__dirname, '../build');
   app.use(express.static('../build'));
+
   res.sendFile(`${buildDir}/index.html`, function (err) {
     if (err) {
       console.log(err);
-      console.log('-----------> Are you sure frontend is built?');
+      console.log('-----------> Make sure you have run: `npm run build`');
       res.status(err.status).end();
     }
   });
-});
+}
 
 
 // Start the server

@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute} from 'react-router';
 
 // History...
-// import {browserHistory as history} from 'react-router';
-import {hashHistory as history} from 'react-router';
+import {browserHistory as history} from 'react-router';
+// import {hashHistory as history} from 'react-router';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
