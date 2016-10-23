@@ -1,28 +1,30 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-// import auth from '../reducers/auth';
-// import alerts from '../reducers/alerts';
-import { noop } from '../reducers/noop';
+import thunk from 'redux-thunk';
+import { sensors } from '../reducers/sensors';
 
 const rootReducer = combineReducers(
   {
-    noop
+    sensors
   }
 );
 
-const initialState = {};
+const initialState = {
+  // sensors: [
+  //   {id: 'aaaaa-1-bbbbb', room: '001', status: 'ok'}
+  // ]
+};
 
 export default function configureStore() {
   let store;
 
-  if (module.hot) {
+  if (process.env.NODE_ENV === 'development') {
     store = createStore(rootReducer, initialState, compose(
-      applyMiddleware(thunkMiddleware),
+      applyMiddleware(thunk),
       window.devToolsExtension ? window.devToolsExtension() : f => f
     ));
   } else {
     store = createStore(rootReducer, initialState, compose(
-      applyMiddleware(thunkMiddleware), f=>f
+      applyMiddleware(thunk), f=>f
     ));
   }
 

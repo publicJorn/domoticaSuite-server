@@ -22,7 +22,6 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
-        // TODO: temp -hide behind login
         <IndexRedirect to="/dashboard" />
 
         <Route path="/dashboard" component={Dashboard} />

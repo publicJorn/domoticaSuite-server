@@ -1,12 +1,11 @@
+// Mixing container- and presentational container
 import React, { Component, PropTypes } from 'react';
-
 import { connect } from 'react-redux';
-import Header from '../../components/header/Header';
+import Header from '../../components/Header/Header';
 
 import './app.css';
 
 class App extends Component {
-
   render() {
     return (
       <div className="container">
@@ -23,16 +22,15 @@ App.propTypes = {
   location: PropTypes.object.isRequired
 };
 
-App.contextTypes = {
-  router: PropTypes.object.isRequired,
-  store: PropTypes.object.isRequired
-};
+// App.contextTypes = {
+//   router: PropTypes.object.isRequired,
+//   store: PropTypes.object.isRequired
+// };
 
-const mapStateToProps = (state) => {
-  console.log(state);
-  return {};
-};
+// TODO: We start using state on App when we get log in functionality
+// const mapStateToProps = (state) => {
+//   console.log(state);
+//   return {};
+// };
 
-export default connect(
-  mapStateToProps
-)(App);
+export default connect()(App);
