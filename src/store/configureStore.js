@@ -2,17 +2,11 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { sensors } from '../reducers/sensors';
 
-const rootReducer = combineReducers(
-  {
-    sensors
-  }
-);
+const rootReducer = combineReducers({
+  sensors
+});
 
-const initialState = {
-  // sensors: [
-  //   {id: 'aaaaa-1-bbbbb', room: '001', status: 'ok'}
-  // ]
-};
+const initialState = {};
 
 export default function configureStore() {
   let store;

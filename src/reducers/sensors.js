@@ -1,4 +1,4 @@
-import { GET_SENSORS, SHOW_SENSORS, ADD_SENSOR } from '../actions/sensors';
+import { REQUEST_SENSORS, RECEIVE_SENSORS, ADD_SENSOR } from '../actions/sensors';
 
 /**
  * Manage a single sensor
@@ -19,24 +19,36 @@ function sensor (state, action) {
   }
 }
 
+const defaultSensorState = {
+  isFetching: false,
+  collection: []
+};
+
 /**
  * Manage the list of sensors
- * @param {object} state
+ * @param {object} sensorsState `state.sensors` property
  * @param {object} action
  * @returns {object} sensor collection
  */
-export function sensors (state = [], action) {
+export function sensors (sensorsState = defaultSensorState, action) {
   switch (action.type) {
-    case GET_SENSORS:
-      return state;
+    case REQUEST_SENSORS:
+      return Object.assign({}, sensorsState, {
+        isFetching: true
+      });
 
-    case SHOW_SENSORS:
-      return action.sensors;
+    case RECEIVE_SENSORS:
+      return Object.assign({}, sensorsState, {
+        isFetching: false,
+        collection: action.sensors
+      });
 
     case ADD_SENSOR:
-      return [...state, sensor(undefined, action)];
+      return Object.assign({}, sensorsState, {
+        collection: [...sensorsState.collection, sensor(undefined, action)]
+      });
 
     default:
-      return state;
+      return sensorsState;
   }
 }

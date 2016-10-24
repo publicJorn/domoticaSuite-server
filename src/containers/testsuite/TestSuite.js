@@ -2,18 +2,18 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import React, { Component } from 'react';
 import ActivityMonitor from '../../components/ActivityMonitor/ActivityMonitor';
-import { getSensors, addSensor } from '../../actions/sensors';
+import { fetchSensors, addSensor } from '../../actions/sensors';
 import AddSensorForm from './AddSensorForm';
 
 class TestSuite extends Component {
   static propTypes = {
-    sensors: React.PropTypes.array,
-    getSensors: React.PropTypes.func,
+    sensors: React.PropTypes.object,
+    fetchSensors: React.PropTypes.func,
     addSensor: React.PropTypes.func
   };
 
   componentDidMount () {
-    this.props.getSensors();
+    this.props.fetchSensors();
   }
 
   render () {
@@ -40,7 +40,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({getSensors, addSensor}, dispatch);
+  return bindActionCreators({fetchSensors, addSensor}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestSuite);

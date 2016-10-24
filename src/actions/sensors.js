@@ -1,23 +1,26 @@
 import uuid from 'uuid';
 import testAsyncFetchSensors from './testAsyncFetchSensors';
 
-export const GET_SENSORS = 'GET_SENSORS';
-export const SHOW_SENSORS = 'SHOW_SENSORS';
+export const REQUEST_SENSORS = 'REQUEST_SENSORS';
+export const RECEIVE_SENSORS = 'RECEIVE_SENSORS';
 export const ADD_SENSOR = 'ADD_SENSOR';
 
-export function getSensors () {
+export function fetchSensors () {
   return function (dispatch) {
-    return testAsyncFetchSensors().then(
-      sensors => {
-        dispatch(showSensors(sensors));
-      }
-    );
+    requestSensors();
+    return testAsyncFetchSensors().then(sensors => dispatch(receiveSensors(sensors)));
   };
 }
 
-export function showSensors (sensors) {
+export function requestSensors () {
   return {
-    type: SHOW_SENSORS,
+    type: REQUEST_SENSORS
+  };
+}
+
+export function receiveSensors (sensors) {
+  return {
+    type: RECEIVE_SENSORS,
     sensors
   };
 }
