@@ -5,6 +5,8 @@ node_modules
 
 # production
 build
+db/*
+!db/dev*
 
 # misc
 .idea

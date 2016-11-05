@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 
 export default class AddSensorForm extends Component {
   static propTypes = {
-    addSensor: React.PropTypes.func
+    saveSensor: React.PropTypes.func
   }
 
   handleAddSensor (evt) {
     evt.preventDefault();
 
-    this.props.addSensor({
+    this.props.saveSensor({
       room: this.refs.room.value
     });
 

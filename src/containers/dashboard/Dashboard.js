@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import React, { Component } from 'react';
 import ActivityMonitor from '../../components/ActivityMonitor/ActivityMonitor';
-import { fetchSensors } from '../../actions/sensors';
+import { fetchSensors } from '../../actions/sensors.action';
 import './dashboard.css';
 
 class Dashboard extends Component {

@@ -3,7 +3,7 @@ const state = {
     isFetching: false,
     collection: [
       {
-        id: '<uuid>',
+        arduinoId: '<arduino-generated-id>',
         room: '001',
         status: 'ok|alert'
       }

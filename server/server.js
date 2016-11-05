@@ -1,8 +1,10 @@
-const path = require('path');
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
+const Database = require('./Database');
 const port = 3001;
+
+const db = new Database();
 
 // Configure app to use bodyParser to parse json data
 const app = express(); 
@@ -15,10 +17,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // TODO: any API stuff here
-app.get('/test', function (req, res) {
-  res.status(200).send('Server call test succeeds!');
+app.get('/create-sensor/:room', (req, res) => {
+  db.insert('sensors', req.params)
+    .then((data) => {
+      console.log(`Sensor for room ${data.room} added.`);
+      res.status(200).send({ok: true, data});
+    })
+    .catch((error) => {
+      console.log(`ERROR: ${error}`);
+      res.status(200).send({ok: false, error});
+    });
 });
 
+app.get('/sensors', (req, res) => {
+  db.find('sensors')
+    .then((data) => res.status(200).send({ok: true, data}))
+    .catch((error) => {
+      console.log(`ERROR: ${error}`);
+      res.status(200).send({ok: false, error});
+    });
+});
 
 // Catch initial page load requests
 app.get('/', serveApp);
@@ -37,7 +55,6 @@ function serveApp (req, res) {
     }
   });
 }
-
 
 // Start the server
 server.listen(port);

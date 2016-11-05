@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { sensors } from '../reducers/sensors';
+import { sensors } from '../reducers/sensors.reducer';
 
 const rootReducer = combineReducers({
   sensors

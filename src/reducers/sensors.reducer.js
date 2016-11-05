@@ -1,4 +1,4 @@
-import { REQUEST_SENSORS, RECEIVE_SENSORS, ADD_SENSOR } from '../actions/sensors';
+import { REQUEST_SENSORS, RECEIVE_SENSORS, SAVING_SENSOR, ADD_SENSOR } from '../actions/sensors.action';
 
 /**
  * Manage a single sensor
@@ -43,8 +43,14 @@ export function sensors (sensorsState = defaultSensorState, action) {
         collection: action.sensors
       });
 
+    case SAVING_SENSOR:
+      return Object.assign({}, sensorsState, {
+        isSaving: true
+      });
+
     case ADD_SENSOR:
       return Object.assign({}, sensorsState, {
+        isSaving: false,
         collection: [...sensorsState.collection, sensor(undefined, action)]
       });
 

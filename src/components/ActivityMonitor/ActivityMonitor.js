@@ -19,8 +19,7 @@ export default class ActivityMonitor extends Component {
             {collection.map((data, i) =>
               <li key={i}><Sensor {...data} /></li>
             )}
-            {!collection.length ?
-                <li>No sensors</li> : ''}
+            {!collection.length ? <li>No sensors</li> : ''}
           </ul>
         </div>
 
