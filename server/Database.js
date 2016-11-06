@@ -41,7 +41,7 @@ module.exports = class {
 
   find (type) {
     return new Promise((resolve, reject) => {
-      this.db[type].find({}).sort({room: 1}).exec((error, sensors) => {
+      this.db[type].find({}).sort({name: 1}).exec((error, sensors) => {
         if (error)
           reject(error);
         else
@@ -52,8 +52,8 @@ module.exports = class {
 
   parseSensorData (data) {
     // TODO: some proper error checking
-    const {room} = data;
-    return {arduinoId: uuid.v4(), status: 'ok', room};
+    const {name} = data;
+    return {arduinoId: uuid.v4(), status: 'ok', name};
   }
 };
 

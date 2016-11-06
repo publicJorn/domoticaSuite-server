@@ -10,7 +10,7 @@ function sensor (state, action) {
     case ADD_SENSOR:
       return {
         id: action.id,
-        room: action.room,
+        name: action.name,
         status: 'ok'
       };
 

@@ -9,16 +9,16 @@ export default class AddSensorForm extends Component {
     evt.preventDefault();
 
     this.props.saveSensor({
-      room: this.refs.room.value
+      name: this.refs.name.value
     });
 
-    this.refs.room.value = '';
+    this.refs.name.value = '';
   }
 
   render () {
     return (
       <form onSubmit={this.handleAddSensor.bind(this)}>
-        Room: <input ref="room" type="number" />
+        Name: <input ref="name" type="number" />
         <button type="submit">Add sensor</button>
       </form>
     );

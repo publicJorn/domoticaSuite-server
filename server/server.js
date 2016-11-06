@@ -17,10 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // TODO: any API stuff here
-app.get('/create-sensor/:room', (req, res) => {
+app.get('/create-sensor/:name', (req, res) => {
   db.insert('sensors', req.params)
     .then((data) => {
-      console.log(`Sensor for room ${data.room} added.`);
+      console.log(`Sensor "${data.name}" added.`);
       res.status(200).send({ok: true, data});
     })
     .catch((error) => {

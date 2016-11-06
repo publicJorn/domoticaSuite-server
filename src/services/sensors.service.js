@@ -9,10 +9,10 @@ export function retrieve () {
 }
 
 export function save (data) {
-  const {room} = data;
+  const {name} = data;
 
   try {
-    return fetch(`/create-sensor/${room}/${status}`).then((resp) => resp.json());
+    return fetch(`/create-sensor/${name}`).then((resp) => resp.json());
   } catch (err) {
     console.error(err);
   }
@@ -23,9 +23,9 @@ export function testFetch () {
   return new Promise ((resolve) => {
     setTimeout(() => {
       resolve([
-        {arduinoId: uuid.v4(), room: '001', status: 'ok'},
-        {arduinoId: uuid.v4(), room: '002', status: 'ok'},
-        {arduinoId: uuid.v4(), room: '003', status: 'ok'}
+        {arduinoId: uuid.v4(), name: 'Kamer 001', status: 'ok'},
+        {arduinoId: uuid.v4(), name: 'Kamer 002', status: 'ok'},
+        {arduinoId: uuid.v4(), name: 'Kamer 003', status: 'ok'}
       ]);
     }, 1000);
   });

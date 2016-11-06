@@ -4,7 +4,7 @@ const state = {
     collection: [
       {
         arduinoId: '<arduino-generated-id>',
-        room: '001',
+        name: '001',
         status: 'ok|alert'
       }
     ]
