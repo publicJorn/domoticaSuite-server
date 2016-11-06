@@ -53,7 +53,7 @@ module.exports = class {
   parseSensorData (data) {
     // TODO: some proper error checking
     const {name} = data;
-    return {arduinoId: uuid.v4(), status: 'ok', name};
+    return {arduinoId: uuid.v4(), name, status: 'ok'};
   }
 };
 

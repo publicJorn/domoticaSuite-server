@@ -12,7 +12,7 @@ import './index.css';
 
 import App from './containers/app/App';
 import Dashboard from './containers/dashboard/Dashboard';
-import TestSuite from './containers/testsuite/TestSuite';
+import SensorView from './containers/Sensors/SensorView';
 import NotFound from './containers/misc/NotFound';
 
 import configureStore from './store/configureStore';
@@ -25,7 +25,8 @@ ReactDOM.render(
         <IndexRedirect to="/dashboard" />
 
         <Route path="/dashboard" component={Dashboard} />
-        <Route path="/testsuite" component={TestSuite} />
+        <Route path="/sensors(/:id)" component={SensorView} />
+
         {/* TODO: Just a reminder: check react-redux-starter-kit again
         <Route component={RestrictPage}>
           <Route path="/dashboard" component={Dashboard} />

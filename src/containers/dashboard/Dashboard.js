@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import React, { Component } from 'react';
-import ActivityMonitor from '../../components/ActivityMonitor/ActivityMonitor';
 import { fetchSensors } from '../../actions/sensors.action';
+import ComponentList from '../../components/ComponentList';
+import SensorStatus from '../../components/Sensor/SensorStatus';
 import './dashboard.css';
 
 class Dashboard extends Component {
   static propTypes = {
-    sensors: React.PropTypes.object,
-    fetchSensors: React.PropTypes.func
+    sensors: React.PropTypes.object.isRequired,
+    fetchSensors: React.PropTypes.func.isRequired
   };
 
   componentDidMount () {
@@ -16,13 +17,25 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { sensors } = this.props;
+    const sensorCollection = this.props.sensors.collection;
 
     return (
       <div className="row">
         <div className="col-xs-12">
           <h1>Dashboard</h1>
-          <ActivityMonitor sensors={sensors} />
+
+          <div className="row">
+            <div className="col-sm-6">
+              <h2>Sensors</h2>
+              <ComponentList Component={SensorStatus} componentPluralName="sensors" collection={sensorCollection} />
+            </div>
+
+            <div className="col-sm-6">
+              <h2>Monitors</h2>
+              {/* Misusing `Sensors` here until we have a `Monitor` component and an actual list */}
+              <ComponentList Component={SensorStatus} componentPluralName="monitors" collection={[]} />
+            </div>
+          </div>
         </div>
       </div>
     );

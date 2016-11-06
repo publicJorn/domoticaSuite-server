@@ -8,10 +8,13 @@ import { REQUEST_SENSORS, RECEIVE_SENSORS, SAVING_SENSOR, ADD_SENSOR } from '../
 function sensor (state, action) {
   switch (action.type) {
     case ADD_SENSOR:
+      const {_id, arduinoId, name, status} = action;
+
       return {
-        id: action.id,
-        name: action.name,
-        status: 'ok'
+        _id,
+        arduinoId,
+        name,
+        status
       };
 
     default:

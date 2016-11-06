@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export default class AddSensorForm extends Component {
   static propTypes = {
-    saveSensor: React.PropTypes.func
+    saveSensor: React.PropTypes.func.isRequired
   }
 
   handleAddSensor (evt) {
@@ -18,7 +18,7 @@ export default class AddSensorForm extends Component {
   render () {
     return (
       <form onSubmit={this.handleAddSensor.bind(this)}>
-        Name: <input ref="name" type="number" />
+        Name: <input ref="name" />
         <button type="submit">Add sensor</button>
       </form>
     );

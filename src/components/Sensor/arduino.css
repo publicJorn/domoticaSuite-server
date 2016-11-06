@@ -1,0 +1,12 @@
+.arduino {
+  width: 100%;
+}
+
+.arduino td {
+  padding: 0.25rem;
+  vertical-align: top;
+}
+
+.arduino td:nth-child(1) {
+  width: 33%;
+}

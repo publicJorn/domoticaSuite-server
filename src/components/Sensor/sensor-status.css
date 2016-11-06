@@ -1,0 +1,35 @@
+.sensor-status {
+  line-height: 1.75;
+}
+
+.sensor-status__link:hover {
+  text-decoration: none;
+}
+
+.sensor-status__link:hover [class*="sensor-status"]:not(.sensor-status__status) {
+  text-decoration: underline;
+}
+
+.sensor-status__status {
+  margin-left: .5rem;
+  padding: .15rem .5rem;
+  border-radius: 3px;
+}
+
+.sensor-status__status--ok {
+  color: white;
+  background-color: rgba(0, 220, 0 , 0.5);
+  border: 1px solid rgb(0, 200, 0);
+}
+
+.sensor-status__status--alert {
+  color: white;
+  background-color: rgba(255, 0, 0 , 0.5);
+  border: 1px solid rgb(230, 0, 0);
+}
+
+.sensor-status__status--warning {
+  color: rgb(50, 50, 50);
+  background-color: rgba(255, 238, 0, 0.7);
+  border: 1px solid rgb(0, 0, 0);
+}

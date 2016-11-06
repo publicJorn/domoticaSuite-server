@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import ucFirst from '../../utils/ucFirst';
 
 export default class ComponentList extends Component {
   static propTypes = {
-    Component: React.PropTypes.func,
-    componentPluralName: React.PropTypes.string,
-    collection: React.PropTypes.array
+    Component: React.PropTypes.func.isRequired,
+    componentPluralName: React.PropTypes.string.isRequired,
+    collection: React.PropTypes.array.isRequired,
+    className: React.PropTypes.string
   }
 
   render () {
-    const {Component, componentPluralName, collection} = this.props;
+    const {Component, componentPluralName, collection, className = ''} = this.props;
 
     return (
       <div>
-        <h3>{ucFirst(componentPluralName)}</h3>
-        <ul>
+        <ul className={className}>
           {collection.map((data, i) =>
             <li key={i}><Component {...data} /></li>
           )}

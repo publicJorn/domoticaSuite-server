@@ -3,8 +3,9 @@ const state = {
     isFetching: false,
     collection: [
       {
+        _ui: '<db-generated-id>',
         arduinoId: '<arduino-generated-id>',
-        name: '001',
+        name: 'Some name',
         status: 'ok|alert'
       }
     ]
