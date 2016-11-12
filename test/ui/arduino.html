@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arduino mock</title>
+  <link rel="stylesheet" href="/static/mockui.css" />
+</head>
+
+<body class="arduino">
+  <main class="container">
+    <h1><span class="u-txt-arduino">Arduino</span> mock</h1>
+    <p>Test an arduino connection to the domotica suite server.</p>
+
+    <form>
+      <fieldset>
+        <p>Device id:</p>
+        <input type="text" />
+        <button type="submit">Connect</button>
+      </fieldset>
+    </form>
+
+    <fieldset class="connected">
+      <button>Trigger alert</button>
+    </fieldset>
+
+    <fieldset>
+      <p>Log:</p>
+      <textarea id="log"></textarea>
+    </fieldset>
+  </main>
+
+
+  <script src="/static/socket.io.js"></script>
+  <script>
+    console.log('socket.io?', io);
+  </script>
+</body>
+</html>
