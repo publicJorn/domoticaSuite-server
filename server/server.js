@@ -5,46 +5,51 @@ const bodyParser = require('body-parser');
 const Database = require('./Database');
 const Api = require('./Api');
 
-// Configure app to use bodyParser to parse json data
 const production = process.env.NODE_ENV === 'production';
-const port = 3001;
+const expressPort = process.env.EXPRESS_PORT || (production) ? 80 : 3001;
+
+// Configure app to use bodyParser to parse json data
+// TODO: This was copied from boilerplate; Do we need it?
 const app = express();
 const server = http.createServer(app);  
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 
-// Websockets!
-// const io = require('socket.io')(server);
-
-// API
-const db = new Database();
-const sensorApi = new Api(db, 'sensors');
-app.get('/create-sensor/:name', (req, res) => sensorApi.insert(req, res));
-app.get('/sensors', (req, res) => sensorApi.find(req, res));
-
-// Catch initial page load requests
+// Initial page load requests serve the Domotica server client application
 const buildDir = path.resolve(__dirname, '../build');
 app.get('/', serveApp);
 app.get('/dashboard', serveApp);
-app.get('/testsuite', serveApp);
+app.get('/sensors(/*)?', serveApp);
 
-// Only for dev testing
-const testDir = path.resolve(__dirname, '../test/ui');
+
+// Websocket API for sensors
+const io = require('socket.io')(server);
+const sensorIo = io.of('/io/sensor');
+
+sensorIo.on('connection', (socket) => {
+  console.log('io: connected');
+  socket.emit('connected', {msg: 'connected to sensor/io'});
+});
+
+
+// API for server to manage sensors
+const db = new Database();
+const s2sApi = new Api(db, 'sensors');
+app.get('/api/sensor/create/:name', (req, res) => s2sApi.insert(req, res));
+app.get('/api/sensors', (req, res) => s2sApi.find(req, res));
+
+
+// Testing routes
 if (!production) {
-  app.use('/static', express.static(testDir));
-  app.get('/static/socket.io.js', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../node_modules/socket.io-client/socket.io.js'), err => console.error(err));
-  });
-  app.get('/mock/:device', mockDevice);
+  require('../test/mockArduino')(app);
 }
 
-// Use front-end app's 404 flow
-// app.get('*', serveApp); // -> This will also intercept statically served files, so they won't be served :(
+// Use front-end app's 404 flow for remaining requests
+app.get('*', serveApp); // -> This will also intercept statically served files, so they won't be served :(
 
 // Start the server
-server.listen(port);
-console.log('Server is listening on port ' + port);
-
+server.listen(expressPort);
+console.log('Server is listening on port ' + expressPort);
 
 
 function serveApp (req, res) {
@@ -54,17 +59,6 @@ function serveApp (req, res) {
     if (err) {
       console.error(err);
       console.log('-----------> Make sure you have run: `npm run build`');
-      res.status(err.status).end();
-    }
-  });
-}
-
-function mockDevice (req, res) {
-  const device = req.params.device;
-
-  res.sendFile(`${testDir}/${device}.html`, (err) => {
-    if (err) {
-      console.error(err);
       res.status(err.status).end();
     }
   });

@@ -9,7 +9,7 @@ body {
 }
 
 body.arduino {
-  border: 10px solid red;
+  border: 10px solid rgb(0, 100, 220);
 }
 
 .container {
@@ -19,7 +19,7 @@ body.arduino {
 }
 
 .u-txt-arduino {
-  color: red;
+  color: rgb(0, 100, 220);
 }
 
 fieldset {
@@ -31,7 +31,7 @@ fieldset p {
   margin-top: 0;
 }
 
-.connected {
+.alert {
   padding: 1rem;
   text-align: center;
   border: 5px solid red;

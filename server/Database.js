@@ -39,7 +39,7 @@ module.exports = class {
     });
   }
 
-  find (type) {
+  findAll (type) {
     return new Promise((resolve, reject) => {
       this.db[type].find({}).sort({name: 1}).exec((error, sensors) => {
         if (error)

@@ -2,7 +2,7 @@
 
 export function retrieve () {
   try {
-    return fetch('/sensors').then((resp) => resp.json());
+    return fetch('/api/sensors').then((resp) => resp.json());
   } catch (err) {
     console.error(err);
   }
@@ -12,7 +12,7 @@ export function save (data) {
   const {name} = data;
 
   try {
-    return fetch(`/create-sensor/${name}`).then((resp) => resp.json());
+    return fetch(`/api/sensor/create/${name}`).then((resp) => resp.json());
   } catch (err) {
     console.error(err);
   }

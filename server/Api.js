@@ -21,7 +21,7 @@ module.exports = class {
   }
 
   find (req, res) {
-    this.db.find(this.store)
+    this.db.findAll(this.store)
       .then((data) => res.status(200).send({ok: true, data}))
       .catch((error) => {
         console.log(`ERROR: ${error}`);

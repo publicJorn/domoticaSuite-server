@@ -19,7 +19,7 @@
       </fieldset>
     </form>
 
-    <fieldset class="connected">
+    <fieldset class="alert">
       <button>Trigger alert</button>
     </fieldset>
 
@@ -32,7 +32,11 @@
 
   <script src="/static/socket.io.js"></script>
   <script>
-    console.log('socket.io?', io);
+    const sensorIo = io.connect('http://localhost:3001/io/sensor');
+
+    sensorIo.on('connected', function (data) {
+      console.log(data);
+    });
   </script>
 </body>
 </html>
