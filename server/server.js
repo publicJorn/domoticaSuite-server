@@ -8,6 +8,9 @@ const Api = require('./Api');
 const production = process.env.NODE_ENV === 'production';
 const expressPort = process.env.EXPRESS_PORT || (production) ? 80 : 3001;
 
+// Initialize logging
+const logger = require('../src/utils/loggerFactory')();
+
 // Configure app to use bodyParser to parse json data
 // TODO: This was copied from boilerplate; Do we need it?
 const app = express();
@@ -49,7 +52,7 @@ app.get('*', serveApp); // -> This will also intercept statically served files, 
 
 // Start the server
 server.listen(expressPort);
-console.log('Server is listening on port ' + expressPort);
+logger.info('Server started, listening on port ' + expressPort);
 
 
 function serveApp (req, res) {
@@ -57,8 +60,7 @@ function serveApp (req, res) {
 
   res.sendFile(`${buildDir}/index.html`, (err) => {
     if (err) {
-      console.error(err);
-      console.log('-----------> Make sure you have run: `npm run build`');
+      logger.error(`${err}\n\n-----------> Make sure you have run: \`npm run build\``);
       res.status(err.status).end();
     }
   });

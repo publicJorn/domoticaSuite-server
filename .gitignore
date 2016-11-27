@@ -6,6 +6,7 @@ node_modules
 # production
 build
 db/*
+logs/*
 !db/dev*
 
 # misc

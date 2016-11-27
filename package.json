@@ -45,7 +45,8 @@
     "redux-thunk": "^2.1.0",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.4.8",
-    "uuid": "^2.0.3"
+    "uuid": "^2.0.3",
+    "winston": "^2.3.0"
   },
   "proxy": "http://localhost:3001",
   "scripts": {
