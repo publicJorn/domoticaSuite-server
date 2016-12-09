@@ -23,12 +23,14 @@ const fileHandle = 'file-all';
 
 /**
  * Expand the default winston logger
- * @export
+ * @export default
  */
 function loggerFactory () {
   if (winston.default.transports[fileHandle]) {
     return winston;
   }
+
+  winston.level = 'debug';
 
   if (process.env.NODE_ENV !== 'production') {
     createNewFile();
@@ -38,7 +40,7 @@ function loggerFactory () {
   winston.cli();
 
   return winston;
-};
+}
 
 /**
  * Recursive timer function to create a new file
@@ -68,7 +70,7 @@ function createNewFile () {
   winston.add(winston.transports.File, {
     name: fileHandle,
     filename: `${logDir}/${fileName}-all.log`,
-    level: 'debug',
+    level: (process.env.NODE_ENV === 'production' && !process.env.DEBUG) ? 'info' : 'debug',
     json: false,
     prettyPrint: true
   });
@@ -90,6 +92,5 @@ function getMsUntilTomorrow () {
   // One minute after midnight
   return (tomorrow.getTime() - now.getTime()) + (1000 * 60);
 }
-
 
 module.exports = loggerFactory;
