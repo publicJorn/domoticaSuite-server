@@ -10,33 +10,85 @@
   <main class="container">
     <h1><span class="u-txt-arduino">Arduino</span> mock</h1>
     <p>Test an arduino connection to the domotica suite server.</p>
+    <p>TODO: automate this test</p>
 
     <form>
       <fieldset>
-        <p>Device id:</p>
-        <input type="text" />
+        <p>Arduino id:</p>
+        <input type="text" name="arduinoId" />
         <button type="submit">Connect</button>
       </fieldset>
     </form>
 
     <fieldset class="alert">
-      <button>Trigger alert</button>
+      <button id="alertTrigger">Trigger alert</button>
+      <button id="resetButton">Clear alert</button>
     </fieldset>
 
-    <fieldset>
-      <p>Log:</p>
-      <textarea id="log"></textarea>
-    </fieldset>
+    <p>Press [F12] (win/linux) or [Command]+[i] (mac) to see console logging.</p>
   </main>
 
 
   <script src="/static/socket.io.js"></script>
   <script>
-    const sensorIo = io.connect('http://localhost:3001/io/sensor');
+    const elForm = document.querySelector('form');
+    const alertButton = document.querySelector('#alertTrigger');
+    const alertField = document.querySelector('.alert');
 
-    sensorIo.on('connected', function (data) {
-      console.log(data);
-    });
+    // Let's "save state" in simple object literal
+    let sensor = {
+      status: 'ok'
+    };
+
+    elForm.addEventListener('submit', onSubmit);
+    alertButton.addEventListener('click', emitAlert);
+    resetButton.addEventListener('click', confirmAlert);
+
+    function onSubmit (e) {
+      e.preventDefault();
+      elForm.arduinoId.setAttribute('disabled', 'disabled');
+      createConnection();
+    }
+
+    function createConnection () {
+      const arduinoId = elForm.arduinoId.value;
+
+      if (arduinoId) {
+        sensor.arduinoId = arduinoId;
+        sensor.io = io.connect('http://localhost:3001/io/sensor');
+
+        sensor.io.on('connected', function (data) {
+          console.log('Connected, received data (if any):', data ? data : '');
+          console.log('sending identity');
+          sensor.io.emit('identify', {
+            arduinoId: arduinoId
+          });
+        });
+
+        sensor.io.on('alert confirmed', confirmAlert);
+      }
+    }
+
+    function emitAlert () {
+      if (!sensor.io) return;
+
+      // Even though state on server should be known (after 1st time), send again
+      sensor.io.emit('alert');
+
+      if (!sensor.status === 'alert') {
+        sensor.status = 'alert';
+        alertField.classList.add('alert--on');
+        sensor.resendAlertTimer = setTimeout(function () {
+          emitAlert();
+        }, 5000);
+      }
+    }
+
+    function confirmAlert () {
+      clearTimeout(sensor.resendAlertTimer);
+      sensor.status = 'ok';
+      alertField.classList.remove('alert--on');
+    }
   </script>
 </body>
 </html>

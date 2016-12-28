@@ -4,9 +4,10 @@ const express = require('express');
 const testDir = path.resolve(__dirname, './ui');
 
 /**
- * Define routes for the mock tests
- * Is exported function
+ * Define routes for the mock tests.
+ * @usedby server
  * @param app
+ * @exports
  */
 const routings = (app) => {
   app.use('/static', express.static(testDir +'/static'));

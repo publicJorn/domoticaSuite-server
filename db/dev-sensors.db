@@ -1,5 +1,6 @@
-{"arduinoId":"f0626d97-48b4-41cd-8cef-05adb8c33b31","name":"Kamer 201","status":"warning","_id":"020lZteP2blqCamE"}
-{"arduinoId":"fba837ae-dda9-4e77-a48b-c0ae3409e58d","name":"Kamer 103","status":"ok","_id":"2OvHwtGjqfQ3ZXSt"}
-{"arduinoId":"d985537c-3745-4c5f-bb0b-e3c9ad7bb425","name":"Kamer 102","status":"alert","_id":"4hHN9WINh9JWHysh"}
-{"arduinoId":"f1ccae2d-af20-449d-83e1-568d02aa582f","name":"Kamer 202","status":"ok","_id":"DATBdykxD2FSZQEA"}
-{"arduinoId":"8d721e0a-a452-4fc9-93ad-d4617e17198f","name":"Kamer 101","status":"ok","_id":"Khf0zfdc0BXmhUMC"}
+{"arduinoId":"1","name":"Kamer 201","status":"ok","_id":"020lZteP2blqCamE"}
+{"arduinoId":"2","name":"Kamer 103","status":"ok","_id":"2OvHwtGjqfQ3ZXSt"}
+{"arduinoId":"3","name":"Kamer 102","status":"ok","_id":"4hHN9WINh9JWHysh"}
+{"arduinoId":"4","name":"Kamer 202","status":"ok","_id":"DATBdykxD2FSZQEA"}
+{"arduinoId":"5","name":"Kamer 101","status":"ok","_id":"Khf0zfdc0BXmhUMC"}
+{"arduinoId":"901","name":"","status":"identifying","_id":"fUFzyvS8TRxtgXEp"}

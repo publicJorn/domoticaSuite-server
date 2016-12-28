@@ -33,7 +33,8 @@ function loggerFactory () {
   winston.level = 'debug';
 
   if (process.env.NODE_ENV !== 'production') {
-    createNewFile();
+    // Only console logging in development
+    // createNewFile();
   } else {
     startNewLogfileTimer();
   }

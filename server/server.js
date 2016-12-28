@@ -1,9 +1,10 @@
 const path = require('path');
 const http = require('http');
 const express = require('express');
+const socket = require('socket.io');
 const bodyParser = require('body-parser');
-const Database = require('./Database');
-const Api = require('./Api');
+const SensorDatabase = require('./SensorDatabase');
+const SensorApi = require('./SensorApi');
 
 const production = process.env.NODE_ENV === 'production';
 const expressPort = process.env.EXPRESS_PORT || (production) ? 80 : 3001;
@@ -14,41 +15,30 @@ const logger = require('../src/utils/loggerFactory')();
 // Configure app to use bodyParser to parse json data
 // TODO: This was copied from boilerplate; Do we need it?
 const app = express();
-const server = http.createServer(app);  
+const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 
-// Initial page load requests serve the Domotica server client application
+// Synchronous page load requests serve the Domotica server client application
 const buildDir = path.resolve(__dirname, '../build');
 app.get('/', serveApp);
 app.get('/dashboard', serveApp);
 app.get('/sensors(/*)?', serveApp);
 
+const io = socket(server);
+const sDB = new SensorDatabase();
 
-// Websocket API for sensors
-const io = require('socket.io')(server);
-const sensorIo = io.of('/io/sensor');
-
-sensorIo.on('connection', (socket) => {
-  console.log('io: connected');
-  socket.emit('connected', {msg: 'connected to sensor/io'});
-});
-
-
-// API for server to manage sensors
-const db = new Database();
-const s2sApi = new Api(db, 'sensors');
-app.get('/api/sensor/create/:name', (req, res) => s2sApi.insert(req, res));
-app.get('/api/sensors', (req, res) => s2sApi.find(req, res));
+// API for everything sensor related
+const sApi = new SensorApi(app, io, sDB);
 
 
 // Testing routes
 if (!production) {
-  require('../test/mockArduino')(app);
+  require('../test/mockDevice')(app);
 }
 
 // Use front-end app's 404 flow for remaining requests
-app.get('*', serveApp); // -> This will also intercept statically served files, so they won't be served :(
+app.get('*', serveApp); // -> This will also intercept statically served files, so they won't be served :(  TODO: double check
 
 // Start the server
 server.listen(expressPort);
