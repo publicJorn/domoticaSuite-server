@@ -4,8 +4,9 @@
   "description": "Solution for sensor <-> server <-> monitor communication.",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/publicJorn/domoticaSuite-server"
   },
+  "author": "publicJorn",
   "keywords": [
     "domotica",
     "IoT",
@@ -15,9 +16,17 @@
     "react",
     "websockets"
   ],
-  "author": "publicJorn",
-  "bugs": {
-    "url": "https://github.com/cloudmu/react-redux-starter-kit/issues"
+  "scripts": {
+    "start": "concurrently -k \"npm run dev\" \"npm run server\"",
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "server": "nodemon ./server/server.js"
+  },
+  "proxy": "http://localhost:3001",
+  "eslintConfig": {
+    "extends": "./node_modules/react-scripts/config/eslint.js"
   },
   "devDependencies": {
     "concurrently": "^3.1.0",
@@ -49,16 +58,4 @@
     "uuid": "^2.0.3",
     "winston": "^2.3.0"
   },
-  "proxy": "http://localhost:3001",
-  "scripts": {
-    "start": "concurrently -k \"npm run dev\" \"npm run server\"",
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "server": "nodemon ./server/server.js"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/react-scripts/config/eslint.js"
-  }
 }
