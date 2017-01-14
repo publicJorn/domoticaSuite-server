@@ -56,25 +56,53 @@ module.exports = class {
     logger.debug(`New connection on sensor namespace: ${socket.client.id}`);
 
     // TODO: make this a proper class and (maybe) do database operations from it
-    let sensor = {
+    let client = {
       clientId: socket.client.id,
+      type: '', // sensor | monitor
       data: {}
     };
 
-    this.ioConnections.push(sensor);
-    socket.emit('connected', sensor);
+    this.ioConnections.push(client);
+    socket.emit('connected', client);
 
     // Using this construction to keep `this` pointing to SensorApi and keep socket/connection data as well
-    socket.on('identify', (identity) => this.onIdentifySensor(socket, identity));
+    socket.on('identify', (identity) => this.onIdentifyClient(socket, identity));
+
+    // Sensors
     socket.on('alert', this.onAlert.bind(this, socket));
     socket.on('disconnect', this.onDisconnect.bind(this, socket));
+    // Monitors (including server interface)
+    socket.on('subscribe', (room) => this.joinRoom(socket, room));
   }
 
-  onIdentifySensor (socket, identity) {
+  /**
+   *
+   * @param socket
+   * @param identity {type: '', (id: '' || arduinoId: '')}
+   */
+  onIdentifyClient (socket, identity) {
+    switch (identity.type) {
+      case 'sensor':
+        this.identifySensor(socket, identity);
+        break;
+
+      case 'monitor':
+        this.identifyMonitor(socket, identity);
+        break;
+
+      default:
+        throw('No known type given during identifidation. Identity:\n' + JSON.stringify(identity));
+    }
+  }
+
+  identifySensor (socket, identity) {
     logger.debug(`Identifying sensor ${identity.arduinoId}`);
 
-    if (this.findConnectedClientByArduinoId(identity.arduinoId)) {
+    const client = this.findConnectedClientByArduinoId(identity.arduinoId);
+
+    if (client) {
       logger.info(`Received connection request from sensor ${identity.arduinoId}, but is already connected`);
+      client.forceDisconnect = true;
       socket.disconnect();
       return;
     }
@@ -89,14 +117,16 @@ module.exports = class {
         }
 
         // Save stored data on socket instance in connections array
-        this.findConnectedClientById(socket.client.id).data = storedData;
+        const client = this.findConnectedClientById(socket.client.id);
+        client.type = identity.type;
+        client.data = storedData;
 
         if (storedData.status === STATUS_IDENTIFY) {
           logger.info(`Waiting for admin to confirm sensor with arduinoId: ${identity.arduinoId}`);
-          this.io.to('clients').emit('confirm sensor', {data: storedData});
+          this.emitSensorList();
         } else {
           logger.info(`Registered sensor connected successfully (arduinoId: ${identity.arduinoId})`);
-          this.io.to('clients').emit('sensorlist updated', {data: storedData});
+          this.emitSensorList();
         }
 
         this.debugLogCurrentConnections();
@@ -105,12 +135,27 @@ module.exports = class {
       .catch((err) => logger.error('Error identifying sensor', {msg: err}));
   }
 
+  identifyMonitor (socket, identity) {
+    // TODO: check key/pass
+    logger.debug(`Identifying monitor`, identity);
+
+    socket.join('monitors');
+    this.emitSensorList();
+  }
+
+  emitSensorList () {
+    logger.debug('Fetching and emitting sensorlist...');
+    this.db.findAll()
+      .then((sensors) => this.io.to('monitors').emit('sensorlist', sensors))
+      .catch(logger.error);
+  }
+
   onAlert (socket) {
     let sensorData = this.findConnectedClientById(socket.client.id).data;
     logger.info('Sensor triggers alert!', sensorData);
 
     this.db.toggleAlert(true, sensorData);
-    this.io.to('clients').emit('alert', {sensorData});
+    this.io.to('monitors').emit('alert', {sensorData});
   }
 
   onDisconnect (socket) {
@@ -119,12 +164,11 @@ module.exports = class {
 
     this.ioConnections.splice(id, 1);
 
-    let arduinoId = client.data.arduinoId;
-
-    if (arduinoId) {
-      logger.warn(`Disconnected sensor ${arduinoId}`);
+    if (client.type === 'sensor' && !client.forceDisconnect) {
+      logger.warn(`Disconnected sensor: ${client.data.arduinoId}`);
+      this.io.to('monitors').emit('disconnection', client.data);
     } else {
-      logger.info(`Client disconnected`);
+      logger.info(`Client disconnected`, {client});
     }
 
     this.debugLogCurrentConnections();
@@ -138,7 +182,7 @@ module.exports = class {
 
   findConnectedClientByArduinoId (arduinoId) {
     return this.ioConnections.filter((client) => {
-      if (client.data.arduinoId === arduinoId) return client;
+      if (client.data && client.data.arduinoId === arduinoId) return client;
     })[0];
   }
 

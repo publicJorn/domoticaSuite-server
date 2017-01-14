@@ -61,6 +61,7 @@
           console.log('Connected, received data (if any):', data ? data : '');
           console.log('sending identity');
           sensor.io.emit('identify', {
+            type: 'sensor',
             arduinoId: arduinoId
           });
         });

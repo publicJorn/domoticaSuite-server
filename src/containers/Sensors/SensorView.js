@@ -16,10 +16,6 @@ class TestSuite extends Component {
     saveSensor: React.PropTypes.func.isRequired
   };
 
-  componentDidMount () {
-    this.props.fetchSensors();
-  }
-
   parseSelectedSensor (collection) {
     const sensor = collection.filter((sensor) => sensor._id === this.props.routeParams.id)[0];
 

@@ -1,4 +1,5 @@
 import { REQUEST_SENSORS, RECEIVE_SENSORS, SAVING_SENSOR, ADD_SENSOR } from '../actions/sensors.action';
+import initialState from '../store/stateDesign';
 
 /**
  * Manage a single sensor
@@ -22,18 +23,13 @@ function sensor (state, action) {
   }
 }
 
-const defaultSensorState = {
-  isFetching: false,
-  collection: []
-};
-
 /**
  * Manage the list of sensors
  * @param {object} sensorsState `state.sensors` property
  * @param {object} action
  * @returns {object} sensor collection
  */
-export function sensors (sensorsState = defaultSensorState, action) {
+export function sensors (sensorsState = initialState.sensors, action) {
   switch (action.type) {
     case REQUEST_SENSORS:
       return Object.assign({}, sensorsState, {

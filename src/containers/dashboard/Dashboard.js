@@ -1,6 +1,6 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import React, { Component } from 'react';
 import { fetchSensors } from '../../actions/sensors.action';
 import ComponentList from '../../components/ComponentList';
 import SensorStatus from '../../components/Sensor/SensorStatus';
@@ -12,12 +12,9 @@ class Dashboard extends Component {
     fetchSensors: React.PropTypes.func.isRequired
   };
 
-  componentDidMount () {
-    this.props.fetchSensors();
-  }
-
   render() {
     const sensorCollection = this.props.sensors.collection;
+    const isLoading = this.props.sensors.isFetching;
 
     return (
       <div className="row">
@@ -27,7 +24,7 @@ class Dashboard extends Component {
           <div className="row">
             <div className="col-sm-6">
               <h2>Sensors</h2>
-              <ComponentList Component={SensorStatus} componentPluralName="sensors" collection={sensorCollection} />
+              <ComponentList Component={SensorStatus} componentPluralName="sensors" collection={sensorCollection} isLoading={isLoading} />
             </div>
 
             <div className="col-sm-6">

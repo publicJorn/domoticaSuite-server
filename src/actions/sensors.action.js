@@ -4,11 +4,14 @@ export const REQUEST_SENSORS = 'REQUEST_SENSORS';
 export const RECEIVE_SENSORS = 'RECEIVE_SENSORS';
 export const SAVING_SENSOR = 'SAVING_SENSOR';
 export const ADD_SENSOR = 'ADD_SENSOR';
+export const SENSOR_ALERT = 'SENSOR_ALERT';
 
-// Fetch flow ---
+/**
+ * Not used atm; keeping for now in case sockets don't work
+ */
 export function fetchSensors () {
-  return function (dispatch) {
-    requestSensors();
+  return (dispatch) => {
+    dispatch(requestSensors());
 
     return sensorsService.retrieve().then((sensorFetch) => {
       // TODO: handle `ok == false`
@@ -20,22 +23,31 @@ export function fetchSensors () {
 }
 
 export function requestSensors () {
+  console.info('requestSensors');
   return {
     type: REQUEST_SENSORS
   };
 }
 
 export function receiveSensors (sensors) {
+  console.info('receiveSensors', sensors);
   return {
     type: RECEIVE_SENSORS,
     sensors
   };
 }
 
+export function sensorAlert (data) {
+  return {
+    type: SENSOR_ALERT,
+    data
+  };
+}
+
 // Save flow ---
 export function saveSensor (formData) {
   return function (dispatch) {
-    savingSensor(formData);
+    dispatch(savingSensor(formData));
 
     return sensorsService.save(formData).then((result) => {
       if (result.ok) {
