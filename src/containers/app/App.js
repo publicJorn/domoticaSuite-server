@@ -14,7 +14,6 @@ class App extends Component {
   };
 
   componentDidMount () {
-    console.info('App, this.props', this.props);
     this.props.bindSensorSocketToActions();
   }
 

@@ -1,13 +1,14 @@
+import { debounce } from 'lodash';
 import * as sensorsService from '../services/sensors.service';
 
 export const REQUEST_SENSORS = 'REQUEST_SENSORS';
 export const RECEIVE_SENSORS = 'RECEIVE_SENSORS';
-export const SAVING_SENSOR = 'SAVING_SENSOR';
-export const ADD_SENSOR = 'ADD_SENSOR';
+export const UPDATE_SENSOR = 'UPDATE_SENSOR';
+export const SENSOR_SAVED = 'SENSOR_SAVED';
 export const SENSOR_ALERT = 'SENSOR_ALERT';
 
 /**
- * Not used atm; keeping for now in case sockets don't work
+ * Not used atm; keeping as fallback when websockets are not supported
  */
 export function fetchSensors () {
   return (dispatch) => {
@@ -23,14 +24,12 @@ export function fetchSensors () {
 }
 
 export function requestSensors () {
-  console.info('requestSensors');
   return {
     type: REQUEST_SENSORS
   };
 }
 
 export function receiveSensors (sensors) {
-  console.info('receiveSensors', sensors);
   return {
     type: RECEIVE_SENSORS,
     sensors
@@ -44,29 +43,41 @@ export function sensorAlert (data) {
   };
 }
 
-// Save flow ---
-export function saveSensor (formData) {
-  return function (dispatch) {
-    dispatch(savingSensor(formData));
+// Save flow ===>
+let debouncedSensorSave = null;
 
-    return sensorsService.save(formData).then((result) => {
-      if (result.ok) {
-        dispatch(addSensor(result.data));
-      }
-    });
+export function setupSaveSensor (dispatch) {
+  // Make sure it only sets up once
+  if (debouncedSensorSave === null) {
+    debouncedSensorSave = debounce((data) => saveSensorState(dispatch, data), 200);
+  }
+}
+
+export function saveSensor (data) {
+  return (dispatch) => {
+    dispatch(updateSensorState(data));
+    debouncedSensorSave(data);
   };
 }
 
-export function savingSensor (formData) {
-  console.log('TODO: loader via reducer...', formData);
+export function updateSensorState (data) {
   return {
-    type: SAVING_SENSOR
+    type: UPDATE_SENSOR,
+    data
   };
 }
 
-export function addSensor (sensorData) {
-  return {
-    type: ADD_SENSOR,
-    ...sensorData
-  };
+/**
+ * Save on the server
+ * Note: this function would be abstracted out by a Saga
+ */
+export function saveSensorState (dispatch, data) {
+  console.info('yes, lets submit the changed data to the backend. and then dispatch', data, dispatch);
+
+  // return sensorsService.save(data).then((result) => {
+  //   if (result.ok) {
+  //     dispatch(addSensor(result.data));
+  //   }
+  // });
 }
+

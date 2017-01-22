@@ -1,11 +1,14 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import React, { Component } from 'react';
-import { fetchSensors, saveSensor } from '../../actions/sensors.action';
+import {
+  fetchSensors,
+  setupSaveSensor,
+  saveSensor
+} from '../../actions/sensors.action';
 import ComponentList from '../../components/ComponentList';
 import SensorStatus from '../../components/Sensor/SensorStatus';
 import Arduino from '../../components/Sensor/Arduino';
-import AddSensorForm from './AddSensorForm';
 import './sensors.css';
 
 class TestSuite extends Component {
@@ -16,18 +19,8 @@ class TestSuite extends Component {
     saveSensor: React.PropTypes.func.isRequired
   };
 
-  parseSelectedSensor (collection) {
-    const sensor = collection.filter((sensor) => sensor._id === this.props.routeParams.id)[0];
-
-    if (sensor) {
-      return <Arduino sensor={sensor} />;
-    } else {
-      return <p>Choose a sensor from the list</p>;
-    }
-  }
-
   render () {
-    const {sensors, saveSensor} = this.props;
+    const {sensors} = this.props;
     const selectedSensor = this.parseSelectedSensor(sensors.collection);
 
     return (
@@ -48,14 +41,28 @@ class TestSuite extends Component {
               {selectedSensor}
             </div>
           </div>
-
-          <hr />
-
-          {/* TODO: implement form in list (or anything more fancy than this...) */}
-          <AddSensorForm saveSensor={saveSensor} />
         </div>
       </div>
     );
+  }
+
+  /**
+   * Print the sensor details and normalise onChange event data and add id
+   * -- I could have used redux-forms, but I wanted to know how it works, so I'm taking the long route :)
+   */
+  parseSelectedSensor (collection) {
+    const sensor = collection.filter((sensor) => sensor._id === this.props.routeParams.id)[0];
+
+    const saveSensorWrapper = (evt) => {
+      const { name, value } = evt.target;
+      this.props.saveSensor({key: name, value, _id: sensor._id});
+    };
+
+    if (sensor) {
+      return <Arduino sensor={sensor} saveSensor={saveSensorWrapper} />;
+    } else {
+      return <p>Choose a sensor from the list</p>;
+    }
   }
 }
 
@@ -67,6 +74,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  setupSaveSensor(dispatch);
   return bindActionCreators({fetchSensors, saveSensor}, dispatch);
 };
 

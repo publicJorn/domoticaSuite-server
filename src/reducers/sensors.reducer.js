@@ -1,4 +1,9 @@
-import { REQUEST_SENSORS, RECEIVE_SENSORS, SAVING_SENSOR, ADD_SENSOR } from '../actions/sensors.action';
+import {
+  REQUEST_SENSORS,
+  RECEIVE_SENSORS,
+  UPDATE_SENSOR,
+  SENSOR_SAVED
+} from '../actions/sensors.action';
 import initialState from '../store/stateDesign';
 
 /**
@@ -6,22 +11,22 @@ import initialState from '../store/stateDesign';
  * @param {object} state
  * @param {object} action
  */
-function sensor (state, action) {
-  switch (action.type) {
-    case ADD_SENSOR:
-      const {_id, arduinoId, name, status} = action;
-
-      return {
-        _id,
-        arduinoId,
-        name,
-        status
-      };
-
-    default:
-      return state;
-  }
-}
+// function sensor (state, action) {
+//   switch (action.type) {
+//     case ADD_SENSOR:
+//       const {_id, arduinoId, name, status} = action;
+//
+//       return {
+//         _id,
+//         arduinoId,
+//         name,
+//         status
+//       };
+//
+//     default:
+//       return state;
+//   }
+// }
 
 /**
  * Manage the list of sensors
@@ -42,15 +47,26 @@ export function sensors (sensorsState = initialState.sensors, action) {
         collection: action.sensors
       });
 
-    case SAVING_SENSOR:
-      return Object.assign({}, sensorsState, {
-        isSaving: true
+    case UPDATE_SENSOR:
+      const { key, value, _id } = action.data;
+
+      const collection = sensorsState.collection.map((sensor) => {
+        if (sensor._id === _id) {
+          sensor[key] = value;
+        }
+        return sensor;
       });
 
-    case ADD_SENSOR:
+      const newState = Object.assign({}, sensorsState, {
+        isSaving: true,
+        collection: collection
+      });
+
+      return newState;
+
+    case SENSOR_SAVED:
       return Object.assign({}, sensorsState, {
-        isSaving: false,
-        collection: [...sensorsState.collection, sensor(undefined, action)]
+        isSaving: true,
       });
 
     default:

@@ -3,7 +3,8 @@ import './arduino.css';
 
 export default class Arduino extends Component {
   static propTypes = {
-    sensor: React.PropTypes.object
+    sensor: React.PropTypes.object,
+    saveSensor: React.PropTypes.func.isRequired
   };
 
   render() {
@@ -18,7 +19,7 @@ export default class Arduino extends Component {
           </tr>
           <tr>
             <td>Name</td>
-            <td>{name}</td>
+            <td><input name="name" value={name} onChange={this.props.saveSensor} /></td>
           </tr>
           <tr>
             <td>Status</td>

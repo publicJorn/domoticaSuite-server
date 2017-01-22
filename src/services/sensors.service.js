@@ -1,7 +1,11 @@
 // TODO: figure out a good dev/prod way to set (base) url
 import io from 'socket.io-client';
 import axios from 'axios';
-import { requestSensors, receiveSensors, sensorAlert } from '../actions/sensors.action';
+import {
+  requestSensors,
+  receiveSensors,
+  sensorAlert
+} from '../actions/sensors.action';
 
 export default function bindSensorSocketToActions () {
   return (dispatch) => {
@@ -27,7 +31,7 @@ export function retrieve () {
 }
 
 export function save (data) {
-  const {name} = data;
+  const { name } = data;
 
   try {
     return fetch(`/api/sensor/create/${name}`).then((resp) => resp.json());
