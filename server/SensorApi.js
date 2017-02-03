@@ -73,6 +73,7 @@ module.exports = class {
     socket.on('disconnect', this.onDisconnect.bind(this, socket));
     // Monitors (including server interface)
     socket.on('subscribe', (room) => this.joinRoom(socket, room));
+    socket.on('save', this.updateSensor.bind(this));
   }
 
   /**
@@ -156,6 +157,14 @@ module.exports = class {
 
     this.db.toggleAlert(true, sensorData);
     this.io.to('monitors').emit('alert', {sensorData});
+  }
+
+  updateSensor (sensorData, ok) {
+    logger.info('Update sensor');
+
+    this.db.update(sensorData)
+      .then(() => ok(true))
+      .catch(() => ok(false));
   }
 
   onDisconnect (socket) {

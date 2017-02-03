@@ -43,7 +43,10 @@ export function sensorAlert (data) {
   };
 }
 
-// Save flow ===>
+/**
+ * Save flow ===>
+ * Create a debounced save function, so not every keystroke triggers an actual save to server
+ */
 let debouncedSensorSave = null;
 
 export function setupSaveSensor (dispatch) {
@@ -53,6 +56,9 @@ export function setupSaveSensor (dispatch) {
   }
 }
 
+/**
+ * Here we trigger an immediate store update (local, client side) and a call to the debounced "server save" function
+ */
 export function saveSensor (data) {
   return (dispatch) => {
     dispatch(updateSensorState(data));
@@ -72,12 +78,13 @@ export function updateSensorState (data) {
  * Note: this function would be abstracted out by a Saga
  */
 export function saveSensorState (dispatch, data) {
-  console.info('yes, lets submit the changed data to the backend. and then dispatch', data, dispatch);
+  sensorsService.save(data, (success) => dispatch(sensorSaved(success)));
+}
 
-  // return sensorsService.save(data).then((result) => {
-  //   if (result.ok) {
-  //     dispatch(addSensor(result.data));
-  //   }
-  // });
+export function sensorSaved (success) {
+  return {
+    type: SENSOR_SAVED,
+    success
+  };
 }
 

@@ -9,6 +9,7 @@ import {
 import ComponentList from '../../components/ComponentList';
 import SensorStatus from '../../components/Sensor/SensorStatus';
 import Arduino from '../../components/Sensor/Arduino';
+import MessageLine from '../../components/MessageLine/MessageLine';
 import './sensors.css';
 
 class TestSuite extends Component {
@@ -26,6 +27,8 @@ class TestSuite extends Component {
     return (
       <div className="row">
         <div className="col-xs-12">
+          <MessageLine message={this.checkUpdateMessage()} />
+
           <h1>Sensors</h1>
 
           <div className="row">
@@ -44,6 +47,14 @@ class TestSuite extends Component {
         </div>
       </div>
     );
+  }
+
+  checkUpdateMessage () {
+    if (this.props.sensors.isSaving === false) {
+      return 'All changes saved';
+    } else {
+      return '';
+    }
   }
 
   /**

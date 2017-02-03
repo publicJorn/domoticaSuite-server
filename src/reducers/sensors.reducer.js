@@ -50,6 +50,7 @@ export function sensors (sensorsState = initialState.sensors, action) {
     case UPDATE_SENSOR:
       const { key, value, _id } = action.data;
 
+      // Extract the collection of the current state and change the sensor data of the one that's changed
       const collection = sensorsState.collection.map((sensor) => {
         if (sensor._id === _id) {
           sensor[key] = value;
@@ -57,16 +58,19 @@ export function sensors (sensorsState = initialState.sensors, action) {
         return sensor;
       });
 
+      // Construct a new state object
       const newState = Object.assign({}, sensorsState, {
         isSaving: true,
         collection: collection
       });
 
+      // Note: this only updates the client side state
       return newState;
 
     case SENSOR_SAVED:
+      console.log(`SAVE is ${action.success ? 'successful' : 'unsuccessful'}`);
       return Object.assign({}, sensorsState, {
-        isSaving: true,
+        isSaving: false
       });
 
     default:

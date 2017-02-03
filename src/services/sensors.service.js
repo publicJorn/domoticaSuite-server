@@ -7,11 +7,13 @@ import {
   sensorAlert
 } from '../actions/sensors.action';
 
+let socket;
+
 export default function bindSensorSocketToActions () {
   return (dispatch) => {
     dispatch(requestSensors());
 
-    const socket = io.connect('/io/sensor'); // Non-matched route goes to http://localhost:3001
+    socket = io.connect('/io/sensor'); // Non-matched route goes to http://localhost:3001
 
     socket.on('connected', () => {
       socket.emit('identify', {type: 'monitor'});
@@ -22,19 +24,13 @@ export default function bindSensorSocketToActions () {
   };
 }
 
+export function save (data, cb) {
+  socket.emit('save', data, cb);
+}
+
 export function retrieve () {
   try {
     return axios.get('/api/sensors').then((resp) => resp.data);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export function save (data) {
-  const { name } = data;
-
-  try {
-    return fetch(`/api/sensor/create/${name}`).then((resp) => resp.json());
   } catch (err) {
     console.error(err);
   }

@@ -50,7 +50,14 @@ module.exports = class {
 
   // TODO
   update (data) {
-    // this.db.update({arduinoId: data.arduinoId}, data, options, callback)
+    return new Promise((resolve, reject) => {
+      const { _id, key, value } = data;
+      if (!key || !value) reject('Required params not given');
+
+      this.db.update({_id}, { $set: { [key] : value } }, (err) => {
+        err ? reject(err) : resolve();
+      });
+    });
   }
 
   /**

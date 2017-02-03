@@ -1,0 +1,11 @@
+.MessageLine {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+}
+
+.MessageLine.is-visible {
+  opacity: 1;
+}
