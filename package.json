@@ -31,16 +31,14 @@
   "devDependencies": {
     "concurrently": "^3.1.0",
     "nodemon": "^1.11.0",
-    "react-scripts": "0.6.0"
+    "react-scripts": "0.8.5"
   },
   "dependencies": {
-    "axios": "^0.15.3",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "express": "^4.14.0",
     "font-awesome": "^4.6.3",
-    "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.1.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.17.2",
