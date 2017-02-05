@@ -58,8 +58,7 @@ module.exports = class {
     // TODO: make this a proper class and (maybe) do database operations from it
     let client = {
       clientId: socket.client.id,
-      type: '', // sensor | monitor
-      data: {}
+      type: '' // sensor | monitor
     };
 
     this.ioConnections.push(client);
@@ -132,15 +131,21 @@ module.exports = class {
 
         this.debugLogCurrentConnections();
       })
-      // TODO: retry # times in timeframe
+      // TODO: retry X times in timeframe
       .catch((err) => logger.error('Error identifying sensor', {msg: err}));
   }
 
+  // TODO: check key/pass
   identifyMonitor (socket, identity) {
-    // TODO: check key/pass
     logger.debug(`Identifying monitor`, identity);
 
+    // Save stored data on socket instance in connections array
+    const client = this.findConnectedClientById(socket.client.id);
+    client.type = identity.type;
+
     socket.join('monitors');
+
+    this.debugLogCurrentConnections();
     this.emitSensorList();
   }
 

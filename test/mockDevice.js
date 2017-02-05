@@ -13,7 +13,7 @@ const routings = (app) => {
   app.use('/static', express.static(testDir +'/static'));
 
   app.get('/static/socket.io.js', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../node_modules/socket.io-client/socket.io.js'), err => {
+    res.sendFile(path.resolve(__dirname, '../node_modules/socket.io-client/dist/socket.io.js'), err => {
       if (err) console.error(err);
     });
   });

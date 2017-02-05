@@ -19,9 +19,10 @@ const server = http.createServer(app);
 const buildDir = path.resolve(__dirname, '../build');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/static', express.static(buildDir +'/static'));
+app.use('/static', express.static(buildDir +'/static')); // After build, bundle is here
 
 // Synchronous page load requests serve the Domotica server client application
+// Note we do not use server side rendering, so previous state is lost
 app.get('/', serveApp);
 app.get('/dashboard', serveApp);
 app.get('/sensors(/*)?', serveApp);
@@ -38,7 +39,8 @@ if (!production) {
 }
 
 // Use front-end app's 404 flow for remaining requests
-app.get('*', serveApp);
+// Matches any path without an extension
+app.get(/^(\/(\w+))*\/?(\.\w)?\??([^.]+)?$/, serveApp);
 
 // Start the server
 server.listen(expressPort);
